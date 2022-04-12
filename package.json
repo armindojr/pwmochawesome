@@ -1,0 +1,36 @@
+{
+  "name": "pwmochawesome",
+  "description": "A playwright custom reporter that integrates with mochawesome reporter",
+  "version": "1.0.0",
+  "keywords": [
+    "reporter",
+    "mocha",
+    "mochawesome",
+    "playwright",
+    "automation"
+  ],
+  "author": "Armindo Junior <armindo.junior05@gmail.com>",
+  "contributors": [
+    "Armindo Junior <armindo.junior05@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "lint": "npx eslint -c ./.eslintrc ./index.js",
+    "lint:fix": "npx eslint -c ./.eslintrc ./index.js --fix"
+  },
+  "dependencies": {
+    "mochawesome-report-generator": "^6.2.0",
+    "strip-ansi": "^6.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  },
+  "license": "GPL-3.0-only",
+  "main": "index.js"
+}
