@@ -42,18 +42,22 @@ const compiledResult = {
             duration: 0,
             root: true,
             rootEmpty: true,
+            _timeout: 0,
         },
     ],
     meta: {
         mochawesome: {
-            options: null,
-            version: '7.0.1'
+            options: {},
+            version: '7.0.1',
         },
         marge: {
-            options: null,
-            version: '6.2.0'
-        }
-    }
+            options: {},
+            version: '6.2.0',
+        },
+        mocha: {
+            version: '7.0.1',
+        },
+    },
 };
 let totalDuration = 0;
 
@@ -105,6 +109,7 @@ class PWMochawesomeReporter {
                 duration: 0,
                 root: false,
                 rootEmpty: false,
+                _timeout: 0,
             };
 
             // deal with specs that don't use describe in it
@@ -180,19 +185,36 @@ class PWMochawesomeReporter {
                     suite.pending.push(generatedUuid);
                 }
 
-                // if user has added attachment to test, it will be printed in report
+                // list of attachments
+                const att = [];
+
+                // if user has added attachment to test, it will be passed to report
                 result.attachments.forEach((context) => {
                     if (context.contentType === 'application/json') {
-                        testObject.context = JSON.stringify(JSON.stringify(JSON.stringify(JSON.parse(context.body))));
+                        att.push({
+                            title: context.name,
+                            value: JSON.stringify(JSON.parse(context.body)),
+                        });
                     } else if (context.contentType === 'image/png') {
                         if (context.path) {
-                            testObject.context = JSON.stringify(context.path);
+                            att.push({
+                                title: context.name,
+                                value: context.path,
+                            });
                         } else {
-                            testObject.context += JSON.stringify(
-                                `data:image/png;base64, ${context.body.toString('base64')}`,
-                            );
+                            att.push({
+                                title: context.name,
+                                value: `data:image/png;base64, ${context.body.toString('base64')}`,
+                            });
                         }
+                    } else if (context.contentType === 'application/zip') {
+                        att.push({
+                            title: 'Trace saved to',
+                            value: context.path,
+                        });
                     }
+
+                    testObject.context = JSON.stringify(att);
                 });
 
                 // send test object to our results
@@ -231,7 +253,7 @@ class PWMochawesomeReporter {
         }
     }
 
-    printsToStdio() {}
+    printsToStdio() { }
 }
 
 module.exports = PWMochawesomeReporter;
