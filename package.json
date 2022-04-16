@@ -1,7 +1,7 @@
 {
   "name": "pwmochawesome",
   "description": "A playwright custom reporter that integrates with mochawesome reporter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "reporter",
     "mocha",
