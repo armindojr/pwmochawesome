@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.1.0
+
+### New features
+* Added contentType "text/plain"
+
 ## v1.0.1
 
 ### General Fixes
