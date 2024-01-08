@@ -212,6 +212,11 @@ class PWMochawesomeReporter {
                             title: 'Trace saved to',
                             value: context.path,
                         });
+                    } else if (context.contentType === 'text/plain') {
+                        att.push({
+                            title: context.name,
+                            value: context.body.toString(),
+                        });
                     }
 
                     testObject.context = JSON.stringify(att);
