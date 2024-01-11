@@ -5,31 +5,29 @@ Using playwright test runner to get info about executed tests, it can generate J
 
 ## Installation
 ```bash
-npm install pwmochawesome --save-dev
+npm install pwmochawesome --save
 ```
 
 ## Usage
 According to how Playwright is coded, to use a custom reporter as a package you need to create a file inside your project to import this package like this:
 
-`{project folder}/report.js`
+`{project folder}/report.ts`
 ```js
-const pwmochawesome = require('pwmochawesome');
+import PWMochawesomeReporter from '../pwmochawesome';
 
-module.exports = pwmochawesome;
+export default PWMochawesomeReporter;
 ```
 
 Then you can configure it inside your playwright config file:
 
-`{project folder}/playwright.config.js`
+`{project folder}/playwright.config.ts`
 ```js
-const config = {
-  reporter: [ [ './report.js' ] ],
-};
-
-module.exports = config;
+export default defineConfig({
+    reporter: [ [ './report.ts' ] ],
+});
 ```
 
-Note that we reference our previously created file `report.js` inside reporter property of configuration. With this we can use our custom reporter.
+Note that we reference our previously created file `report.ts` inside reporter property of configuration. With this we can use our custom reporter.
 
 ## Options
 |option|default|description|
@@ -42,27 +40,28 @@ Note that we reference our previously created file `report.js` inside reporter p
 |charts|false|Whether to show charts in html report|
 
 How to pass options to reporter:
-`{project folder}/playwright.config.js`
+`{project folder}/playwright.config.ts`
 ```js
-const config = {
-  reporter: [ [ 
-      './report.js', {
-        outputJSON: true,
-        outputFileName: 'result.json'
-      } 
-  ] ],
-};
-
-module.exports = config;
+export default defineConfig({
+    reporter: [
+        [
+            './reporter.ts',
+            {
+                outputJSON: true,
+                outputFileName: 'result.json'
+            }
+        ]
+    ],
+});
 ```
 
 
 ## Information
-This project is tested and confirmed to work with `@playwright/test: 1.20.2`. If you have more recent version and this package don't work, please create a bug or contribute with pull request.
+This project is tested and confirmed to work with `@playwright/test: 1.40.1` with typescript. If you have more recent version and this package don't work, please create a bug or contribute with pull request.
 
 
 Version compatibility:
 
 | Playwright Mochawesome Reporter | Mochawesome | Marge |
 | ------------------------------- | ----------- | ----- |
-| 1.0.0                           | 7.0.1       | 6.2.0 |
+| 2.0.0                           | 7.0.1       | 6.2.0 |

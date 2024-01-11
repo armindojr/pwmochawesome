@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.0.0
+* Convert to typescript
+* Changes to made compatible with latest playwright version: 1.40.1
+
 ## v1.1.0
 
 ### New features

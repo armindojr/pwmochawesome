@@ -1,21 +1,29 @@
-const stripAnsi = require('strip-ansi');
-const { v4: uuid } = require('uuid');
-const { createSync } = require('mochawesome-report-generator');
-const {
-    writeFileSync, existsSync, mkdirSync,
-} = require('fs');
-const { join } = require('path');
-const { cwd } = require('process');
+import stripAnsi from 'strip-ansi';
+import { v4 as uuid } from 'uuid';
+import { createSync } from 'mochawesome-report-generator';
 
-const compiledResult = {
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
+import { cwd } from 'process';
+
+// Types
+import type {
+    FullConfig, Reporter, Suite, TestCase, TestResult,
+} from '@playwright/test/reporter';
+import type {
+    Options, TestMocha, SuiteMocha, AttachmentsMocha, Result,
+} from './mocha';
+
+// Default values
+const compiledResult: Result = {
     stats: {
         suites: 0,
         tests: 0,
         passes: 0,
         pending: 0,
         failures: 0,
-        start: '',
-        end: '',
+        start: new Date(),
+        end: new Date(),
         duration: 0,
         testsRegistered: 0,
         passPercent: 0,
@@ -59,10 +67,13 @@ const compiledResult = {
         },
     },
 };
+
 let totalDuration = 0;
 
-class PWMochawesomeReporter {
-    constructor(options) {
+export default class PWMochawesomeReporter implements Reporter {
+    options: Options;
+
+    constructor(options: Options) {
         this.options = {
             outputJSON: false,
             outputFileName: 'mochawesome.json',
@@ -80,7 +91,7 @@ class PWMochawesomeReporter {
         }
     }
 
-    onBegin(config, suite) {
+    onBegin(_config: FullConfig, suite: Suite) {
         if (!this.options.outputJSON && !this.options.generateHTML) {
             throw new Error('Output JSON and generate HTML cannot be both disabled!');
         }
@@ -88,54 +99,54 @@ class PWMochawesomeReporter {
         compiledResult.stats.tests = suite.allTests().length;
         compiledResult.stats.testsRegistered = suite.allTests().length;
         compiledResult.stats.start = new Date();
-        compiledResult.stats.suites = suite.suites[0].suites.length;
 
-        // files opened by test runner
-        suite.suites[0].suites.forEach((file) => {
-            const generatedUuid = uuid();
-            const suiteObject = {
-                uuid: generatedUuid,
-                title: '',
-                fullFile: '',
-                file: '',
-                beforeHooks: [],
-                afterHooks: [],
-                tests: [],
-                suites: [],
-                passes: [],
-                failures: [],
-                pending: [],
-                skipped: [],
-                duration: 0,
-                root: false,
-                rootEmpty: false,
-                _timeout: 0,
-            };
+        // deal with project that has dependencies to run
+        suite.suites.forEach((item) => {
+            compiledResult.stats.suites += suite.suites.length;
 
-            // deal with specs that don't use describe in it
-            if (file.suites.length > 0) {
-                suiteObject.fullFile = file.location.file;
-                suiteObject.file = file.title;
+            item.suites.forEach((file) => {
+                const generatedUuid = uuid();
+                const suiteObject: SuiteMocha = {
+                    uuid: generatedUuid,
+                    title: '',
+                    fullFile: '',
+                    file: '',
+                    beforeHooks: [],
+                    afterHooks: [],
+                    tests: [],
+                    suites: [],
+                    passes: [],
+                    failures: [],
+                    pending: [],
+                    skipped: [],
+                    duration: 0,
+                    root: false,
+                    rootEmpty: false,
+                    _timeout: 0,
+                };
 
-                suiteObject.title = file.suites[0].title;
-                file.suites[0].uuid = generatedUuid;
+                // deal with specs that don't use describe in it
+                if (file.suites.length > 0) {
+                    suiteObject.fullFile = file.location?.file;
+                    suiteObject.file = file.title;
+                    suiteObject.title = file.suites[0].title;
 
-                compiledResult.results[0].suites.push(suiteObject);
-            } else if (file.tests.length > 0) {
-                suiteObject.fullFile = file.location.file;
-                suiteObject.file = file.tests[0].parent.title;
+                    compiledResult.results[0].suites.push(suiteObject);
+                } else if (file.tests.length > 0) {
+                    suiteObject.fullFile = file.location?.file;
+                    suiteObject.file = file.tests[0].parent.title;
+                    suiteObject.title = file.tests[0].parent.title;
 
-                suiteObject.title = file.tests[0].parent.title;
-                file.tests[0].parent.uuid = generatedUuid;
-
-                compiledResult.results[0].suites.push(suiteObject);
-            }
+                    compiledResult.results[0].suites.push(suiteObject);
+                }
+            });
         });
     }
 
-    onTestEnd(test, result) {
+    onTestEnd(test: TestCase, result: TestResult) {
         const generatedUuid = uuid();
-        const testObject = {
+        const testObject: TestMocha = {
+            parentTitle: test.parent.title,
             title: test.title,
             fullTitle: `${test.parent.title} ${test.title}`,
             timedOut: false,
@@ -147,9 +158,11 @@ class PWMochawesomeReporter {
             pending: false,
             context: '',
             code: '',
-            err: {},
+            err: {
+                message: undefined,
+                estack: undefined,
+            },
             uuid: generatedUuid,
-            parentUUID: test.parent.uuid,
             isHook: false,
             skipped: false,
         };
@@ -158,15 +171,12 @@ class PWMochawesomeReporter {
 
         // search for each suite that we have added previously
         compiledResult.results[0].suites.forEach((suite) => {
-            // check if current test id is equal to some of the previosly added suite
-            if (suite.uuid === test.parent.uuid) {
+            // check if current test belongs to some of the previosly added suite
+            if (suite.title === test.parent.title) {
                 suite.duration += result.duration;
 
-                // append test code to reporter
-                testObject.code = String(test.fn);
-
                 // deal with test status and update corresponding values
-                if (result.status === 'failed') {
+                if (result.status === 'failed' && result.error?.message && result.error?.stack) {
                     testObject.fail = true;
                     testObject.err = {
                         message: stripAnsi(result.error.message),
@@ -186,16 +196,16 @@ class PWMochawesomeReporter {
                 }
 
                 // list of attachments
-                const att = [];
+                const att: Array<AttachmentsMocha> = [];
 
                 // if user has added attachment to test, it will be passed to report
                 result.attachments.forEach((context) => {
-                    if (context.contentType === 'application/json') {
+                    if (context.contentType === 'application/json' && context.body !== undefined) {
                         att.push({
                             title: context.name,
-                            value: JSON.stringify(JSON.parse(context.body)),
+                            value: JSON.parse(context.body.toString()),
                         });
-                    } else if (context.contentType === 'image/png') {
+                    } else if (context.contentType === 'image/png' && context.body !== undefined) {
                         if (context.path) {
                             att.push({
                                 title: context.name,
@@ -207,12 +217,12 @@ class PWMochawesomeReporter {
                                 value: `data:image/png;base64, ${context.body.toString('base64')}`,
                             });
                         }
-                    } else if (context.contentType === 'application/zip') {
+                    } else if (context.contentType === 'application/zip' && context.path !== undefined) {
                         att.push({
                             title: 'Trace saved to',
                             value: context.path,
                         });
-                    } else if (context.contentType === 'text/plain') {
+                    } else if (context.contentType === 'text/plain' && context.body !== undefined) {
                         att.push({
                             title: context.name,
                             value: context.body.toString(),
@@ -252,13 +262,9 @@ class PWMochawesomeReporter {
         }
 
         if (this.options.outputJSON) {
-            writeFileSync(join(cwd(), this.options.reportDir, this.options.outputFileName), JSON.stringify(compiledResult));
+            writeFileSync(join(cwd(), this.options.reportDir, this.options.outputFileName), JSON.stringify(compiledResult, undefined, 4));
 
             console.log(`\nJSON File saved to: ${join(cwd(), this.options.reportDir, this.options.outputFileName)}`);
         }
     }
-
-    printsToStdio() { }
 }
-
-module.exports = PWMochawesomeReporter;
