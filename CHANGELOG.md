@@ -4,10 +4,14 @@
 * Convert to typescript
 * Changes to made compatible with latest playwright version: 1.40.1
 
+## v1.1.1
+* Reverted strip-ansi update
+
 ## v1.1.0
 
 ### New features
 * Added contentType "text/plain"
+* Updated packages
 
 ## v1.0.1
 
