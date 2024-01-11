@@ -1,7 +1,7 @@
 {
   "name": "pwmochawesome",
   "description": "A playwright custom reporter that integrates with mochawesome reporter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "keywords": [
     "reporter",
     "mocha",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "mochawesome-report-generator": "^6.2.0",
-    "strip-ansi": "^7.1.0",
+    "strip-ansi": "^6.0.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
