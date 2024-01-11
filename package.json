@@ -1,39 +1,41 @@
 {
-  "name": "pwmochawesome",
-  "description": "A playwright custom reporter that integrates with mochawesome reporter",
-  "version": "2.0.0",
-  "keywords": [
-    "reporter",
-    "mocha",
-    "mochawesome",
-    "playwright",
-    "automation"
-  ],
-  "author": "Armindo Junior <armindo.junior05@gmail.com>",
-  "contributors": [
-    "Armindo Junior <armindo.junior05@gmail.com>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "scripts": {
-    "lint": "npx eslint -c ./.eslintrc ./index.ts",
-    "lint:fix": "npx eslint -c ./.eslintrc ./index.ts --fix"
-  },
-  "dependencies": {
-    "@playwright/test": "^1.40.1",
-    "mochawesome-report-generator": "^6.2.0",
-    "strip-ansi": "^6.0.1",
-    "uuid": "^9.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^18.19.0",
-    "eslint": "^8.56.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.29.1",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1"
-  },
-  "license": "GPL-3.0-only"
+    "name": "pwmochawesome",
+    "description": "A playwright custom reporter that integrates with mochawesome reporter",
+    "version": "2.0.0",
+    "keywords": [
+        "reporter",
+        "mocha",
+        "mochawesome",
+        "playwright",
+        "automation"
+    ],
+    "author": "Armindo Junior <armindo.junior05@gmail.com>",
+    "contributors": [
+        "Armindo Junior <armindo.junior05@gmail.com>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "scripts": {
+        "lint": "npx eslint -c ./.eslintrc ./src/*.ts",
+        "lint:fix": "npx eslint -c ./.eslintrc ./src/*.ts --fix"
+    },
+    "main": "./src/index.ts",
+    "types": "./src/index.d.ts",
+    "dependencies": {
+        "@playwright/test": "^1.40.1",
+        "mochawesome-report-generator": "^6.2.0",
+        "strip-ansi": "^6.0.1",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.19.0",
+        "eslint": "^8.56.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-plugin-import": "^2.29.1",
+        "@typescript-eslint/eslint-plugin": "^6.18.1",
+        "@typescript-eslint/parser": "^6.18.1"
+    },
+    "license": "GPL-3.0-only"
 }

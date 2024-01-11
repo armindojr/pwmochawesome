@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-      "allowSyntheticDefaultImports": true,
-      "types": [
-        "node"
-      ]
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "types": [
+            "node"
+        ]
     },
-  }
-  
+}

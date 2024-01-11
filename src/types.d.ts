@@ -50,40 +50,16 @@ export type SuiteMocha = {
 }
 
 export type AttachmentsMocha = {
-        title: string,
-        value: string,
+    title: string,
+    value: string,
 }
 
-export type Result = {
-    stats: {
-        suites: number,
-        tests: number,
-        passes: number,
-        pending: number,
-        failures: number,
-        start: Date,
-        end: Date,
-        duration: number,
-        testsRegistered: number,
-        passPercent: number,
-        pendingPercent: number,
-        other: number,
-        hasOther: boolean,
-        skipped: number,
-        hasSkipped: boolean,
+export type StepsMocha = {
+    step: {
+        title: string,
+        category: string,
+        duration: number
     },
-    results: Array<SuiteMocha>,
-    meta: {
-        mochawesome: {
-            options: object,
-            version: string,
-        },
-        marge: {
-            options: object,
-            version: string,
-        },
-        mocha: {
-            version: string,
-        },
-    }
+    suite: string,
+    test: string
 }
