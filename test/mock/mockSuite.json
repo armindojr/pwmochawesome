@@ -1,0 +1,41 @@
+{
+    "suite1": {
+        "title": "Suite using describe",
+        "suites": [
+            {
+                "suites": [
+                    {
+                        "location": {
+                            "file": "file.js"
+                        },
+                        "title": "Suite title 1",
+                        "suites": [
+                            {
+                                "title": "Suite title 2",
+                                "tests": []
+                            }
+                        ],
+                        "tests": []
+                    }
+                ]
+            }
+        ]
+    },
+    "suite2": {
+        "title": "Suite using tests on root",
+        "suites": [
+            {
+                "suites": [
+                    {
+                        "location": {
+                            "file": "file.js"
+                        },
+                        "title": "Suite title 1",
+                        "suites": [],
+                        "tests": []
+                    }
+                ]
+            }
+        ]
+    }
+}

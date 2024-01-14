@@ -13,7 +13,7 @@ According to how Playwright is coded, to use a custom reporter as a package you 
 
 `{project folder}/report.ts`
 ```js
-import PWMochawesomeReporter from '../pwmochawesome';
+import PWMochawesomeReporter from 'pwmochawesome';
 
 export default PWMochawesomeReporter;
 ```

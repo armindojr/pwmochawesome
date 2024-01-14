@@ -1,9 +1,16 @@
 {
     "compilerOptions": {
+        "outDir": "./dist",
+        "module": "NodeNext",
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
+        "moduleResolution": "NodeNext",
         "types": [
-            "node"
+            "node",
+            "jest"
         ]
     },
+    "include": [
+        "./src/*"
+    ]
 }
