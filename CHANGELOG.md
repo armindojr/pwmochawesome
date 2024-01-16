@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v2.0.1
+* Changes on package.json to allow direct import inside playwright config file
+
 ## v2.0.0
 * Convert to typescript
 * Changes to made compatible with latest playwright version: 1.40.1

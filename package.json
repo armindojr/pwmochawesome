@@ -1,7 +1,7 @@
 {
     "name": "pwmochawesome",
     "description": "A playwright custom reporter that integrates with mochawesome reporter",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "keywords": [
         "reporter",
         "mocha",
@@ -23,7 +23,7 @@
         "compile": "npx tsc",
         "test": "npm run compile; npx jest"
     },
-    "main": "./src/index.ts",
+    "main": "./dist/index.js",
     "types": "./src/index.d.ts",
     "dependencies": {
         "@playwright/test": "^1.40.1",

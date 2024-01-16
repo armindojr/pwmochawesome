@@ -9,25 +9,14 @@ npm install pwmochawesome --save
 ```
 
 ## Usage
-According to how Playwright is coded, to use a custom reporter as a package you need to create a file inside your project to import this package like this:
-
-`{project folder}/report.ts`
-```js
-import PWMochawesomeReporter from 'pwmochawesome';
-
-export default PWMochawesomeReporter;
-```
-
-Then you can configure it inside your playwright config file:
+Configure it inside your playwright config file:
 
 `{project folder}/playwright.config.ts`
 ```js
 export default defineConfig({
-    reporter: [ [ './report.ts' ] ],
+    reporter: [ [ 'pwmochawesome' ] ],
 });
 ```
-
-Note that we reference our previously created file `report.ts` inside reporter property of configuration. With this we can use our custom reporter.
 
 ## Options
 |option|default|description|
@@ -45,7 +34,7 @@ How to pass options to reporter:
 export default defineConfig({
     reporter: [
         [
-            './reporter.ts',
+            'pwmochawesome',
             {
                 outputJSON: true,
                 outputFileName: 'result.json'
