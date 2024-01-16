@@ -1,5 +1,6 @@
-CHANGELOG.md
-README.md
-.travis.yml
-.eslintignore
 .eslintrc
+.gitignore
+CHANGELOG.md
+jest.config.js
+README.md
+tsconfig.json

@@ -1,5 +1,5 @@
 import type {
-    FullConfig, Reporter, Suite, TestCase, TestResult,
+    FullConfig, Reporter, Suite, TestCase, TestResult, TestStep,
 } from '@playwright/test/reporter';
 import type { Options } from './types';
 
@@ -8,8 +8,8 @@ declare class MochawesomeReporter implements Reporter {
 
     onBegin(config: FullConfig, suite: Suite): void;
 
-    // onStepBegin(test: TestCase, _result: TestResult, step: TestStep);
-    // onStepEnd(_test: TestCase, _result: TestResult, step: TestStep);
+    onStepEnd(_test: TestCase, _result: TestResult, step: TestStep): void;
+
     onTestEnd(test: TestCase, result: TestResult): void;
 
     onEnd(): void;
