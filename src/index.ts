@@ -1,60 +1,65 @@
 // Types
 import type {
-    FullConfig, Reporter, Suite, TestCase, TestResult, TestStep,
+  FullConfig,
+  Reporter,
+  Suite,
+  TestCase,
+  TestResult,
+  TestStep
 } from '@playwright/test/reporter';
-import type { Options } from './types';
+import type { Options } from './types.d.ts';
 
 // src
-import MochawesomeRuntime from './runtime';
+import MochawesomeRuntime from './runtime.js';
 
 export default class MochawesomeReporter implements Reporter {
-    options: Options;
+  options: Options;
 
-    runtime: MochawesomeRuntime;
+  runtime: MochawesomeRuntime;
 
-    constructor(options: Options) {
-        this.options = {
-            outputJSON: false,
-            outputFileName: 'mochawesome.json',
-            generateHTML: true,
-            reportDir: 'mochawesome-report',
-            reportTitle: 'Playwright Mochawesome',
-            charts: false,
-        };
+  constructor(options: Options) {
+    this.options = {
+      outputJSON: false,
+      outputFileName: 'mochawesome.json',
+      generateHTML: true,
+      reportDir: 'mochawesome-report',
+      reportTitle: 'Playwright Mochawesome',
+      charts: false
+    };
 
-        // Merge default options with the ones user has passed
-        if (options) {
-            this.options = { ...this.options, ...options };
-        }
-
-        this.runtime = new MochawesomeRuntime(this.options);
+    // Merge default options with the ones user has passed
+    if (options) {
+      this.options = { ...this.options, ...options };
     }
 
-    onBegin(_config: FullConfig, suite: Suite) {
-        // Check if user has disabled both JSON and HTML report options
-        if (!this.options.outputJSON && !this.options.generateHTML) {
-            throw new Error('Output JSON and generate HTML cannot be both disabled!');
-        }
+    this.runtime = new MochawesomeRuntime(this.options);
+  }
 
-        this.runtime.initializeReport(suite);
-        this.runtime.populateSuites(suite);
+  onBegin(_config: FullConfig, suite: Suite) {
+    // Check if user has disabled both JSON and HTML report options
+    if (!this.options.outputJSON && !this.options.generateHTML) {
+      throw new Error('Output JSON and generate HTML cannot be both disabled!');
     }
 
-    onStepEnd(test: TestCase, result: TestResult, step: TestStep) {
-        this.runtime.populateSteps(test, result, step);
-    }
+    this.runtime.initializeReport(suite);
+    this.runtime.populateSuites(suite);
+  }
 
-    onTestEnd(test: TestCase, result: TestResult) {
-        this.runtime.writeConsoleStatus(test, result);
-        this.runtime.populateTests(test, result);
-    }
+  onStepEnd(test: TestCase, result: TestResult, step: TestStep) {
+    this.runtime.populateSteps(test, result, step);
+  }
 
-    onEnd() {
-        this.runtime.finalizeReport();
-        this.runtime.writeResult();
-    }
+  onTestEnd(test: TestCase, result: TestResult) {
+    this.runtime.writeConsoleStatus(test, result);
+    this.runtime.populateTests(test, result);
+  }
 
-    printsToStdio() {
-        return true;
-    }
+  onEnd() {
+    this.runtime.finalizeReport();
+    this.runtime.writeResult();
+  }
+
+  printsToStdio() {
+    return true;
+  }
 }

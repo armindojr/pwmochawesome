@@ -1,21 +1,17 @@
-/** @type {import('jest').Config} */
-const config = {
+export default {
   clearMocks: true,
 
-  collectCoverage: true,
+  collectCoverage: false,
 
   coverageDirectory: "coverage",
 
   coverageProvider: "v8",
 
-  coverageReporters: [
-    "text",
-    "lcov"
-  ],
+  coverageReporters: ["text", "lcov"],
 
-  testMatch: [
-    "**/?(*.)+(spec|test).[tj]s?(x)"
-  ],
+  testMatch: ["**/test/**.spec.js"],
+
+  transform: {
+    "\\.[jt]sx?$": "babel-jest",
+  },
 };
-
-module.exports = config;

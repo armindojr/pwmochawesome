@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // src
-const runtime_1 = __importDefault(require("./runtime"));
-class MochawesomeReporter {
+import MochawesomeRuntime from './runtime.js';
+export default class MochawesomeReporter {
     options;
     runtime;
     constructor(options) {
@@ -15,13 +10,13 @@ class MochawesomeReporter {
             generateHTML: true,
             reportDir: 'mochawesome-report',
             reportTitle: 'Playwright Mochawesome',
-            charts: false,
+            charts: false
         };
         // Merge default options with the ones user has passed
         if (options) {
             this.options = { ...this.options, ...options };
         }
-        this.runtime = new runtime_1.default(this.options);
+        this.runtime = new MochawesomeRuntime(this.options);
     }
     onBegin(_config, suite) {
         // Check if user has disabled both JSON and HTML report options
@@ -46,4 +41,3 @@ class MochawesomeReporter {
         return true;
     }
 }
-exports.default = MochawesomeReporter;
